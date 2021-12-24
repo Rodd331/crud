@@ -1,6 +1,6 @@
-FROM openjdk:11
-MAINTAINER Rodrigo Pires
-COPY ./build/libs/  /var/www
-ENTRYPOINT [ "java", "-jar", "crud-0.0.1-SNAPSHOT.jar" ]
-EXPOSE 8080:8080
-WORKDIR /var/www
+FROM openjdk:11.0.13
+WORKDIR /app
+COPY . .
+RUN ./gradlew clean build
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","build/libs/crud-0.0.1-SNAPSHOT.jar"]

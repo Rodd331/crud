@@ -1,8 +1,7 @@
 package com.rodd331.crud.impl.service;
 
-import com.rodd331.crud.impl.repository.UserEntity;
-import com.rodd331.crud.impl.repository.UserRepository;
-import com.rodd331.crud.stubs.UserEntityStub;
+import com.rodd331.crud.impl.domain.repository.UserRepository;
+import com.rodd331.crud.stubs.UserStub;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -10,14 +9,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.PageRequest;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-import static com.rodd331.crud.stubs.UserEntityStub.generationUserEntity;
-import static com.rodd331.crud.stubs.UserEntityStub.generationUserEntity2;
+import static com.rodd331.crud.stubs.UserStub.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,35 +33,23 @@ public class UserServiceTest {
 
     @Test
     public void createUser() {
-        when(userRepository.save(any())).thenReturn(UserEntityStub.generationUserEntity());
+        when(userRepository.save(any())).thenReturn(UserStub.generationUserEntity());
         userService.create(generationUserEntity());
         verify(userRepository).save(generationUserEntity());
     }
 
-   /* @Test
+    @Test
     public void listAllUsersReturn() {
-        List<UserEntity> teste = new ArrayList<>();
-        teste.add(generationUserEntity());
-
-        when(userRepository.findAll()).thenReturn(teste);
-        userService.listAll();
-        verify(userRepository).findAll();
-    }*/
+        expectedException.expectMessage("Ivalid page");
+        when(userRepository.findAll(PageRequest.of(3, 5))).thenReturn(generationPageUserEntity());
+        userService.listAll(3);
+    }
 
     @Test
     public void validationEmptyList() {
         expectedException.expectMessage("There are no registered users");
         when(userRepository.findAll()).thenReturn(Collections.emptyList());
         userService.validationEmptyList();
-    }
-
-    @Test
-    public void validationEmptyList_2() {
-        List teste = new ArrayList();
-        teste.add(generationUserEntity());
-        when(userRepository.findAll()).thenReturn(teste);
-        userService.validationEmptyList();
-        verify(userRepository).findAll();
     }
 
     @Test
@@ -83,7 +68,7 @@ public class UserServiceTest {
 
     @Test
     public void userFindById() {
-        when(userRepository.findById(any())).thenReturn(Optional.of(UserEntityStub.generationUserEntity()));
+        when(userRepository.findById(any())).thenReturn(Optional.of(UserStub.generationUserEntity()));
         userService.findById("someid");
         verify(userRepository).findById("someid");
     }
@@ -96,9 +81,8 @@ public class UserServiceTest {
 
     @Test
     public void userUpdate() {
-        UserEntity teste = generationUserEntity2();
-        when(userRepository.save(any())).thenReturn(UserEntityStub.generationUserEntity());
-        userService.update(teste);
-        verify(userRepository).save(teste);
+        when(userRepository.save(any())).thenReturn(generationUserEntity());
+        userService.update(generationUserEntity(), "someid");
+        verify(userRepository).save(generationUserEntity());
     }
 }

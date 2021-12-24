@@ -1,23 +1,12 @@
-version: "2"
-
+version: "3.9"
 services:
-  apicrud:
-    image: rodrigo
-    container_name: apicrud
+  mongo:
+    image: mongo
     ports:
-      - "8080:8080"
-    working_dir: /var/www
-    depends_on:
-      - mongo_database
-
-  mongo_database:
-     image: mongo
-     container_name: mongodb
-     volumes:
-        - "./files/mongo:/data/database"
-     ports:
-        - "27017:27017"
-
-
-
-
+      - "27017:27017"
+    volumes:
+      - ./mongo-data:/data/db
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
