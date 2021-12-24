@@ -51,7 +51,7 @@ public class GenericHandler {
     public ExceptionResponse handlerDuplicateKeyException(DuplicateKeyException exception) {
         return ExceptionResponse.builder()
                 .name("DuplicateKeyException")
-                .cause(exception.getMessage())
+                .cause("Dados já cadastrados")
                 .timestamp(LocalDateTime.now())
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .build();
