@@ -1,4 +1,4 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost/db_assembly
+      uri: mongodb://localhost:27017/db_api
